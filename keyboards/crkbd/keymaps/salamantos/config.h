@@ -1,31 +1,6 @@
-/*
-This is the c configuration file for the keymap
-
-Copyright 2012 Jun Wako <wakojun@gmail.com>
-Copyright 2015 Jack Humbert
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
 #pragma once
 
-// #define USE_MATRIX_I2C
-
-/* Select hand configuration */
-
-// #define MASTER_LEFT
-// #define MASTER_RIGHT
+// Select hand configuration
 #define EE_HANDS
 
 //#define TAPPING_FORCE_HOLD
@@ -49,18 +24,3 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #endif
 
 #define OLED_FONT_H "keyboards/crkbd/lib/glcdfont.c"
-
-#define RP2040_BOOTLOADER_DOUBLE_TAP_RESE
-// #define SOFT_SERIAL_PIN D2
-// #define SELECT_SOFT_SERIAL_SPEED 3
-
-// #undef SERIAL_USART_TX_PIN
-// #define SERIAL_USART_DRIVER SIOD0
-
-// #undef SOFT_SERIAL_PIN
-// #define SERIAL_USART_TX_PIN D2
-// #define SERIAL_PIO_USE_PIO1
-// #define USART1_REMAP
-// #define SERIAL_USART_TX_PAL_MODE 7
-// #define SERIAL_USART_RX_PIN D2
-#define SERIAL_DEBUG
