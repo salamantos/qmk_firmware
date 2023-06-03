@@ -21,6 +21,10 @@
     #define RGBLIGHT_HUE_STEP 10
     #define RGBLIGHT_SAT_STEP 17
     #define RGBLIGHT_VAL_STEP 17
+    #define RGBLIGHT_SPLIT
 #endif
 
 #define OLED_FONT_H "keyboards/crkbd/lib/glcdfont.c"
+
+#define UNICODE_SELECTED_MODES UNICODE_MODE_MACOS
+// #define TAP_HOLD_CAPS_DELAY 0

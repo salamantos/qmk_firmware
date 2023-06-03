@@ -1,71 +1,61 @@
-/*
-Copyright 2019 @foostan
-Copyright 2020 Drashna Jaelre <@drashna>
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
 #include QMK_KEYBOARD_H
 #include <stdio.h>
 
+#define TP(kc) LT(0, kc)  // Tap Press
+#define K_PRTSC LGUI(LSFT(KC_4))  // Screenshot
+#define K_LOCK LGUI(LCTL(KC_Q))  // Lock screen
+
+enum SystemLang {
+    EN,
+    RU,
+};
+
+enum LayerNames {
+    BASE,
+    CODE,
+    FUNC,
+    ADJUST,
+};
+
+enum SystemLang system_lang = EN;
+
+const uint16_t US_only_keycodes[] = {KC_DOT,  KC_COMMA};
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-  [0] = LAYOUT_split_3x6_3(
-  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-       KC_TAB,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,                         KC_Y,    KC_U,    KC_I,    KC_O,   KC_P,  KC_BSPC,
-  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LCTL,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                         KC_H,    KC_J,    KC_K,    KC_L, KC_SCLN, KC_QUOT,
-  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                         KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  KC_ESC,
-  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          KC_LGUI,   MO(1),  KC_SPC,     KC_ENT,   MO(2), KC_RALT
-                                      //`--------------------------'  `--------------------------'
+  [BASE] = LAYOUT_split_3x6_3(
+  //,-----------------------------------------------------.                            ,--------------------------------------------------------.
+      TP(KC_TAB), KC_Q,    KC_W,    KC_E,    KC_R,  TP(KC_T),                             KC_Y,   KC_U,    KC_I,    KC_O,    TP(KC_P), KC_BSPC,
+  //|--------+--------+--------+--------+--------+--------|                            |--------+--------+--------+--------+--------+-----------|
+      TP(KC_CAPS_LOCK),    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                              KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN,  KC_ENT,
+  //|--------+--------+--------+--------+--------+--------|                            |--------+--------+--------+--------+--------+-----------|
+      KC_LSFT,   KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                               KC_N,   TP(KC_M), KC_COMMA, KC_DOT, KC_QUOTE, KC_LCTL,
+  //|--------+--------+--------+--------+--------+--------+--------|          |--------+--------+--------+--------+--------+--------+-----------|
+                                          KC_LGUI,   MO(CODE), LT(FUNC, KC_SPC),     LT(FUNC, KC_LCTL),   MO(CODE), KC_LALT
+                                      //`--------------------------'          `--------------------------'
 
   ),
 
-  [1] = LAYOUT_split_3x6_3(
+  [CODE] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-       KC_TAB,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                         KC_6,    KC_7,    KC_8,    KC_9,    KC_0, KC_BSPC,
+      _______,  KC_1,    KC_2,    KC_3,    KC_4,   KC_5,                         KC_6,     KC_7,   KC_8,    KC_9,    KC_0,     KC_DEL,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LCTL, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      KC_LEFT, KC_DOWN,   KC_UP,KC_RIGHT, XXXXXXX, XXXXXXX,
+      _______, KC_TILDE, XXXXXXX, XXXXXXX, KC_MINUS, KC_EQUAL,                      KC_COMMA, KC_DOT, KC_QUES, KC_EXLM, KC_QUOT, KC_DQUO,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LSFT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+      _______, KC_GRAVE, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      KC_LBRC, KC_RBRC, KC_LPRN, KC_RPRN, KC_SLASH, KC_BSLS,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          KC_LGUI, _______,  KC_SPC,     KC_ENT,   MO(3), KC_RALT
+                                          _______, XXXXXXX,  KC_SPC,    XXXXXXX, XXXXXXX, _______
                                       //`--------------------------'  `--------------------------'
   ),
 
-  [2] = LAYOUT_split_3x6_3(
+  [FUNC] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-       KC_TAB, KC_EXLM,   KC_AT, KC_HASH,  KC_DLR, KC_PERC,                      KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_BSPC,
+      KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,                        KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LCTL, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      KC_MINS,  KC_EQL, KC_LBRC, KC_RBRC, KC_BSLS,  KC_GRV,
+      K_PRTSC, XXXXXXX, XXXXXXX, KC_MPLY, KC_VOLU, KC_BRMU,                      KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, XXXXXXX, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LSFT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, KC_PIPE, KC_TILD,
+      XXXXXXX, XXXXXXX, XXXXXXX, KC_MUTE, KC_VOLD, KC_BRMD,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, K_LOCK,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          KC_LGUI,   MO(3),  KC_SPC,     KC_ENT, _______, KC_RALT
-                                      //`--------------------------'  `--------------------------'
-  ),
-
-  [3] = LAYOUT_split_3x6_3(
-  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-        QK_BOOT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      RGB_TOG, RGB_HUI, RGB_SAI, RGB_VAI, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      RGB_MOD, RGB_HUD, RGB_SAD, RGB_VAD, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          KC_LGUI, _______,  KC_SPC,     KC_ENT, _______, KC_RALT
+                                          _______, XXXXXXX,  KC_SPC,    XXXXXXX, XXXXXXX, _______
                                       //`--------------------------'  `--------------------------'
   )
 };
@@ -78,29 +68,37 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
   return rotation;
 }
 
-#define L_BASE 0
-#define L_LOWER 2
-#define L_RAISE 4
-#define L_ADJUST 8
-
 void oled_render_layer_state(void) {
-    oled_write_P(PSTR("Layer: "), false);
-    switch (layer_state) {
-        case L_BASE:
-            oled_write_ln_P(PSTR("Default"), false);
+    // uprintf("default_layer_state %s", default_layer_state);
+    // uprintf("layer_state %s", layer_state);
+    // uprintf("highest_layer %s", get_highest_layer(layer_state));
+    // char layer_state_str[24];
+    // snprintf(layer_state_str, sizeof(layer_state_str), "%u", layer_state);
+    // oled_write_P(PSTR("Layer: "), false);
+    // oled_write_ln_P(layer_state_str, false);
+    switch (system_lang) {
+        case EN:
+            oled_write_P(PSTR("ENGLISH "), false);
             break;
-        case L_LOWER:
-            oled_write_ln_P(PSTR("Lower"), false);
+        case RU:
+            oled_write_P(PSTR("RUSSIAN "), false);
             break;
-        case L_RAISE:
-            oled_write_ln_P(PSTR("Raise"), false);
+    }
+    switch (get_highest_layer(layer_state)) {
+        case BASE:
+            oled_write_ln_P(PSTR(""), false);
             break;
-        case L_ADJUST:
-        case L_ADJUST|L_LOWER:
-        case L_ADJUST|L_RAISE:
-        case L_ADJUST|L_LOWER|L_RAISE:
-            oled_write_ln_P(PSTR("Adjust"), false);
+        case CODE:
+            oled_write_ln_P(PSTR("code"), false);
             break;
+        case FUNC:
+            oled_write_ln_P(PSTR("func"), false);
+            break;
+        case ADJUST:
+            oled_write_ln_P(PSTR("adjust"), false);
+            break;
+        default:
+            oled_write_ln_P(PSTR(""), false);
     }
 }
 
@@ -167,10 +165,96 @@ bool oled_task_user(void) {
     return false;
 }
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  if (record->event.pressed) {
-    set_keylog(keycode, record);
-  }
-  return true;
-}
 #endif // OLED_ENABLE
+
+short lang_switched_keys_count = 0;
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    #ifdef OLED_ENABLE
+        if (record->event.pressed) {
+            set_keylog(keycode, record);
+        }
+    #endif
+
+    switch (keycode) {
+        case TP(KC_CAPS_LOCK):
+            if (record->event.pressed) {
+                switch (system_lang) {
+                    case EN:
+                        system_lang = RU;
+                        break;
+                    case RU:
+                        system_lang = EN;
+                        break;
+                }
+
+                // Intercept tap function
+                if (record->tap.count) {
+                    tap_code(KC_CAPS_LOCK); 
+                }
+
+                return false;
+            }
+            return true;
+        
+        case TP(KC_TAB):
+            if (!record->tap.count && record->event.pressed) {
+                tap_code(KC_ESC);
+                return false;
+            }
+            return true;   
+        
+        case TP(KC_M):
+            if (!record->tap.count && record->event.pressed) {
+                tap_code(KC_RBRC);
+                return false;
+            }
+            return true;   
+        
+        case TP(KC_T):
+            if (!record->tap.count && record->event.pressed) {
+                tap_code(KC_BSLS);
+                return false;
+            }
+            return true;  
+        
+        case TP(KC_P):
+            if (!record->tap.count && record->event.pressed) {
+                tap_code(KC_LBRC);
+                return false;
+            }
+            return true;  
+    }
+
+    
+    
+    if (system_lang == RU && get_highest_layer(layer_state) != BASE && record->event.pressed && (keycode == KC_DOT || keycode == KC_COMMA)) {
+        // Caps Lock: 36 / 10 sec = 250ms (bad) vs 79 = 125 ms
+        if (lang_switched_keys_count <= 0) {
+            tap_code(KC_CAPS_LOCK);
+            // SEND_STRING(SS_LCMD(" ") SS_DELAY(50));
+        }
+        lang_switched_keys_count++;
+        register_code(keycode);
+        return false;
+    }
+
+    return true;
+}
+
+void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (system_lang == RU && get_highest_layer(layer_state) != BASE && !record->event.pressed && (keycode == KC_DOT || keycode == KC_COMMA)) {
+        lang_switched_keys_count--;
+        if (lang_switched_keys_count <= 0) {
+            tap_code(KC_CAPS_LOCK);
+            // SEND_STRING(SS_LCMD(" "));
+            lang_switched_keys_count = 0;
+        }
+    }
+}
+
+void keyboard_post_init_user(void) {
+    rgblight_enable_noeeprom(); // enables Rgb, without saving settings
+    rgblight_sethsv_noeeprom(0, 0, 75);
+    rgblight_mode_noeeprom(RGBLIGHT_MODE_STATIC_LIGHT);
+}
