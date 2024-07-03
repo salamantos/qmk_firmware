@@ -21,29 +21,33 @@ enum SystemLang system_lang = EN;
 
 const uint16_t US_only_keycodes[] = {KC_DOT,  KC_COMMA};
 
+uint16_t international_mapping[1000];
+//international_mapping[KC_DOT] = LSFT(KC_7);
+
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [BASE] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                            ,--------------------------------------------------------.
-      TP(KC_TAB), KC_Q,    KC_W,    KC_E,    KC_R,  TP(KC_T),                             KC_Y,   KC_U,    KC_I,    KC_O,    TP(KC_P), KC_BSPC,
+      TP(KC_TAB), KC_Q,    KC_W,    KC_E,    KC_R,  TP(KC_T),                             KC_Y,   KC_U,    KC_I,    KC_O,    KC_P,     KC_LBRC,
   //|--------+--------+--------+--------+--------+--------|                            |--------+--------+--------+--------+--------+-----------|
-      TP(KC_CAPS_LOCK),    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                              KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN,  KC_ENT,
+      KC_LCTL,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                              KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN,  KC_ENT,
   //|--------+--------+--------+--------+--------+--------|                            |--------+--------+--------+--------+--------+-----------|
-      KC_LSFT,   KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                               KC_N,   TP(KC_M), KC_COMMA, KC_DOT, KC_QUOTE, KC_LCTL,
+      KC_LSFT,   KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                               KC_N,   TP(KC_M), KC_COMMA, KC_DOT, KC_QUOTE, TP(KC_CAPS_LOCK),
   //|--------+--------+--------+--------+--------+--------+--------|          |--------+--------+--------+--------+--------+--------+-----------|
-                                          KC_LGUI,   MO(CODE), LT(FUNC, KC_SPC),     LT(FUNC, KC_LCTL),   MO(CODE), KC_LALT
+                         LT(FUNC, KC_DEL),   LT(CODE,KC_SPC), KC_LGUI,         KC_LALT, LT(CODE, KC_SPC), LT(FUNC, KC_BSPC)
                                       //`--------------------------'          `--------------------------'
 
   ),
 
   [CODE] = LAYOUT_split_3x6_3(
-  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      _______,  KC_1,    KC_2,    KC_3,    KC_4,   KC_5,                         KC_6,     KC_7,   KC_8,    KC_9,    KC_0,     KC_DEL,
-  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, KC_TILDE, XXXXXXX, XXXXXXX, KC_MINUS, KC_EQUAL,                      KC_COMMA, KC_DOT, KC_QUES, KC_EXLM, KC_QUOT, KC_DQUO,
-  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, KC_GRAVE, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      KC_LBRC, KC_RBRC, KC_LPRN, KC_RPRN, KC_SLASH, KC_BSLS,
-  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          _______, XXXXXXX,  KC_SPC,    XXXXXXX, XXXXXXX, _______
+  //|----------+------+-------------+---------+---------+--------------|        |------------+---------+---------------+-----------------+-------------+------------|
+      KC_GRAVE, KC_1,  KC_2,         KC_3,     KC_4,     KC_5,                   KC_6,        KC_7,     KC_8,           KC_9,             KC_0,         XXXXXXX,
+  //|----------+------+-------------+---------+---------+--------------|        |------------+---------+---------------+-----------------+-------------+------------|
+      KC_TILDE, KC_LT, KC_AMPERSAND, KC_EQUAL, KC_MINUS, KC_QUOTE,               KC_QUESTION, KC_COMMA, KC_LEFT_PAREN,  KC_LEFT_BRACKET,  KC_SEMICOLON, KC_SLASH,
+  //|----------+------+-------------+---------+---------+--------------|        |------------+---------+---------------+-----------------+-------------+------------|
+      _______,  KC_GT, KC_ASTERISK,  KC_PLUS,  KC_UNDS,  KC_DOUBLE_QUOTE,        KC_EXCLAIM,  KC_DOT,   KC_RIGHT_PAREN, KC_RIGHT_BRACKET, KC_COLON,     KC_BACKSLASH,
+  //|----------+------+-------------+---------+---------+--------------|        |------------+---------+---------------+-----------------+-------------+------------|
+                                          KC_DEL, KC_SPC,  _______,    _______, KC_SPC, KC_BSPC
                                       //`--------------------------'  `--------------------------'
   ),
 
@@ -53,9 +57,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       K_PRTSC, XXXXXXX, XXXXXXX, KC_MPLY, KC_VOLU, KC_BRMU,                      KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, XXXXXXX, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      XXXXXXX, XXXXXXX, XXXXXXX, KC_MUTE, KC_VOLD, KC_BRMD,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, K_LOCK,
+      TG(ADJUST), XXXXXXX, XXXXXXX, KC_MUTE, KC_VOLD, KC_BRMD,                      KC_HOME, KC_END, XXXXXXX, XXXXXXX, XXXXXXX, K_LOCK,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          _______, XXXXXXX,  KC_SPC,    XXXXXXX, XXXXXXX, _______
+                                          KC_DEL, KC_SPC,  _______,    _______, KC_SPC, KC_BSPC
+                                      //`--------------------------'  `--------------------------'
+  ),
+
+  [ADJUST] = LAYOUT_split_3x6_3(
+  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
+      XXXXXXX, XXXXXXX, RGB_MODE_SWIRL, RGB_MODE_RAINBOW, RGB_MODE_BREATHE, RGB_MODE_PLAIN,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+      KC_LSFT, RGB_VAI, RGB_SAI, RGB_HUI, RGB_MODE_FORWARD, RGB_TOG,                      RGB_SPI, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+      TG(ADJUST), RGB_VAD, RGB_SAD, RGB_HUD, RGB_MODE_REVERSE, XXXXXXX,                      RGB_SPD, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
+                                          XXXXXXX, XXXXXXX,  XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX
                                       //`--------------------------'  `--------------------------'
   )
 };
@@ -167,6 +183,77 @@ bool oled_task_user(void) {
 
 #endif // OLED_ENABLE
 
+
+
+bool process_CODE_keycode_on_RUS_lang(uint16_t keycode) {
+    switch (keycode) {
+        case KC_QUOT:
+        case KC_DQUO:
+            register_code(KC_LSFT);
+            tap_code(KC_2);
+            unregister_code(KC_LSFT);
+            return false;
+        case KC_COMMA:
+            register_code(KC_LSFT);
+            tap_code(KC_6);
+            unregister_code(KC_LSFT);
+            return false;
+        case KC_DOT:
+            register_code(KC_LSFT);
+            tap_code(KC_7);
+            unregister_code(KC_LSFT);
+            return false;
+        case KC_LPRN:
+            register_code(KC_LSFT);
+            tap_code(KC_9);
+            unregister_code(KC_LSFT);
+            return false;
+        case KC_RPRN:
+            register_code(KC_LSFT);
+            tap_code(KC_0);
+            unregister_code(KC_LSFT);
+            return false;
+        case KC_SEMICOLON:
+            register_code(KC_LSFT);
+            tap_code(KC_8);
+            unregister_code(KC_LSFT);
+            return false;
+        case KC_COLON:
+            register_code(KC_LSFT);
+            tap_code(KC_5);
+            unregister_code(KC_LSFT);
+            return false;
+        case KC_QUESTION:
+            register_code(KC_LSFT);
+            tap_code(KC_SLASH);
+            unregister_code(KC_LSFT);
+            return false;
+        case KC_EXCLAIM:
+            register_code(KC_LSFT);
+            tap_code(KC_1);
+            unregister_code(KC_LSFT);
+            return false;
+        case KC_LEFT_BRACKET:
+            register_code(KC_LSFT);
+            tap_code(KC_GRAVE);
+            unregister_code(KC_LSFT);
+            return false;
+        case KC_RIGHT_BRACKET:
+            tap_code(KC_GRAVE);
+            return false;
+        case KC_LT:
+            register_code(KC_LSFT);
+            tap_code(KC_NUBS);
+            unregister_code(KC_LSFT);
+            return false;
+        case KC_GT:
+            tap_code(KC_NUBS);
+            return false;
+        default:
+            return true;
+    }
+}
+
 short lang_switched_keys_count = 0;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -190,71 +277,65 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
                 // Intercept tap function
                 if (record->tap.count) {
-                    tap_code(KC_CAPS_LOCK); 
+                    tap_code(KC_CAPS_LOCK);
                 }
 
                 return false;
             }
             return true;
-        
+
         case TP(KC_TAB):
             if (!record->tap.count && record->event.pressed) {
                 tap_code(KC_ESC);
                 return false;
             }
-            return true;   
-        
+            return true;
+
         case TP(KC_M):
             if (!record->tap.count && record->event.pressed) {
                 tap_code(KC_RBRC);
                 return false;
             }
-            return true;   
-        
+            return true;
+
         case TP(KC_T):
             if (!record->tap.count && record->event.pressed) {
                 tap_code(KC_BSLS);
                 return false;
             }
-            return true;  
-        
+            return true;
+
         case TP(KC_P):
             if (!record->tap.count && record->event.pressed) {
                 tap_code(KC_LBRC);
                 return false;
             }
-            return true;  
+            return true;
     }
 
-    
-    
-    if (system_lang == RU && get_highest_layer(layer_state) != BASE && record->event.pressed && (keycode == KC_DOT || keycode == KC_COMMA)) {
-        // Caps Lock: 36 / 10 sec = 250ms (bad) vs 79 = 125 ms
-        if (lang_switched_keys_count <= 0) {
-            tap_code(KC_CAPS_LOCK);
-            // SEND_STRING(SS_LCMD(" ") SS_DELAY(50));
-        }
-        lang_switched_keys_count++;
-        register_code(keycode);
-        return false;
+
+
+    if (system_lang == RU && get_highest_layer(layer_state) == CODE && record->event.pressed) {
+        return process_CODE_keycode_on_RUS_lang(keycode);
     }
 
     return true;
 }
 
-void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
-    if (system_lang == RU && get_highest_layer(layer_state) != BASE && !record->event.pressed && (keycode == KC_DOT || keycode == KC_COMMA)) {
-        lang_switched_keys_count--;
-        if (lang_switched_keys_count <= 0) {
-            tap_code(KC_CAPS_LOCK);
-            // SEND_STRING(SS_LCMD(" "));
-            lang_switched_keys_count = 0;
-        }
-    }
-}
+// void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
+//     if (system_lang == RU && get_highest_layer(layer_state) == CODE && !record->event.pressed && (keycode == KC_DOT || keycode == KC_COMMA)) {
+//         lang_switched_keys_count--;
+//         if (lang_switched_keys_count <= 0) {
+//             tap_code(KC_CAPS_LOCK);
+//             // SEND_STRING(SS_LCMD(" "));
+//             lang_switched_keys_count = 0;
+//         }
+//     }
+// }
 
 void keyboard_post_init_user(void) {
-    rgblight_enable_noeeprom(); // enables Rgb, without saving settings
-    rgblight_sethsv_noeeprom(0, 0, 75);
-    rgblight_mode_noeeprom(RGBLIGHT_MODE_STATIC_LIGHT);
+    // rgblight_enable_noeeprom(); // enables Rgb, without saving settings
+    // rgblight_sethsv_noeeprom(0, 0, 75);
+    // rgblight_mode_noeeprom(RGBLIGHT_MODE_STATIC_LIGHT);
+    rgb_matrix_mode(RGB_MATRIX_PIXEL_FLOW);
 }

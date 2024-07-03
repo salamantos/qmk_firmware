@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "notes": "Моя потрясающая раскладка",
+  "documentation": "\"This file is a QMK Configurator export. You can import this at <https://config.qmk.fm>. It can also be used directly with QMK's source code.\n\nTo setup your QMK environment check out the tutorial: <https://docs.qmk.fm/#/newbs>\n\nYou can convert this file to a keymap.c using this command: `qmk json2c {keymap}`\n\nYou can compile this keymap using this command: `qmk compile {keymap}`\"\n",
+  "keyboard": "boardsource/unicorne",
+  "keymap": "boardsource_unicorne_salamantos",
+  "layout": "LAYOUT_split_3x6_3",
+  "layers": [
+    [
+        "ANY(Tab [Esc])", "KC_Q", "KC_W", "KC_E", "KC_R", "KC_T", "KC_Y", "KC_U", "KC_I", "KC_O", "KC_P", "KC_BSPC",
+        "KC_LCTL", "KC_A", "KC_S", "KC_D", "KC_F", "KC_G", "KC_H", "KC_J", "KC_K", "KC_L", "KC_NO", "KC_ENT",
+        "KC_LSFT", "KC_Z", "KC_X", "KC_C", "KC_V", "KC_B", "KC_N", "KC_M", "KC_NO", "KC_NO", "KC_NO", "KC_CAPS",
+        "Delete [func]", "Space [code]", "KC_LGUI", "KC_LALT", "Space [code]", "Back Space [func]"
+    ],
+    [
+        "KC_GRAVE", "KC_1", "KC_2",      "KC_3",   "KC_4",  "KC_5",             "KC_6",     "KC_7",   "KC_8",           "KC_9",             "KC_0",         "XXXXXXX",
+        "KC_TILDE", "KC_LT", "KC_AMPERSAND", "KC_EQUAL", "KC_MINUS", "KC_QUOTE",               "KC_QUESTION", "KC_COMMA", "KC_LEFT_PAREN",  "KC_LBRC",  "KC_SCLN", "KC_SLASH",
+        "KC_LSFT",  "KC_GT", "KC_ASTERISK",  "KC_PLUS",  "KC_UNDS",  "KC_DOUBLE_QUOTE",        "KC_EXCLAIM",  "KC_DOT",   "KC_RIGHT_PAREN", "KC_RBRC", "KC_COLN",     "KC_BSLS",
+        "KC_DEL", "KC_SPC",  "_______",    "_______", "KC_SPC", "KC_BSPC"
+    ],
+    [
+        "KC_F1", "KC_F2", "KC_F3", "KC_F4", "KC_F5", "KC_F6", "KC_F7", "KC_F8", "KC_F9", "KC_F10", "KC_F11", "KC_F12",
+        "K_PRTSC", "XXXXXXX", "XXXXXXX", "KC_MPLY", "KC_VOLU", "KC_BRMU", "KC_LEFT", "KC_DOWN", "KC_UP", "KC_RIGHT", "XXXXXXX", "XXXXXXX",
+        "XXXXXXX", "XXXXXXX", "XXXXXXX", "KC_MUTE", "KC_VOLD", "KC_BRMD", "KC_HOME", "KC_END", "XXXXXXX", "XXXXXXX", "XXXXXXX", "K_LOCK",
+        "KC_DEL", "KC_SPC",  "_______",    "_______", "KC_SPC", "KC_BSPC"
+    ],
+    [
+        "ANY(Tab [Esc])", "ANY(Й   )", "ANY(Ц   )", "ANY(У   )", "ANY(К   )", "ANY(Е [Ё])", "ANY(Н   )", "ANY(Г   )", "ANY(Ш   )", "ANY(Щ   )", "ANY(З   )", "ANY(Х   )",
+        "KC_LCTL", "ANY(Ф   )", "ANY(Ы   )", "ANY(В   )", "ANY(А   )", "ANY(П   )", "ANY(Р   )", "ANY(О   )", "ANY(Л   )", "ANY(Д   )", "ANY(Ж   )", "KC_ENT",
+        "KC_LSFT", "ANY(Я   )", "ANY(Ч   )", "ANY(С   )", "ANY(М   )", "ANY(И   )", "ANY(Т   )", "ANY(Ь [Ъ])", "ANY(Б   )", "ANY(Ю   )", "ANY(Э   )", "KC_CAPS",
+        "Delete [func]", "Space [code]", "KC_LGUI", "KC_LALT", "Space [code]", "Back Space [func]"
+    ]
+  ],
+  "author": "salamantos"
+}
