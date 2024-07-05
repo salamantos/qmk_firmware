@@ -19,11 +19,6 @@ enum LayerNames {
 
 enum SystemLang system_lang = EN;
 
-const uint16_t US_only_keycodes[] = {KC_DOT,  KC_COMMA};
-
-uint16_t international_mapping[1000];
-//international_mapping[KC_DOT] = LSFT(KC_7);
-
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [BASE] = LAYOUT_split_3x6_3(
@@ -69,7 +64,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_LSFT, RGB_VAI, RGB_SAI, RGB_HUI, RGB_MODE_FORWARD, RGB_TOG,                      RGB_SPI, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      TG(ADJUST), RGB_VAD, RGB_SAD, RGB_HUD, RGB_MODE_REVERSE, XXXXXXX,                      RGB_SPD, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+      TG(ADJUST), RGB_VAD, RGB_SAD, RGB_HUD, RGB_MODE_REVERSE, EE_CLR,                      RGB_SPD, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           XXXXXXX, XXXXXXX,  XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX
                                       //`--------------------------'  `--------------------------'
@@ -79,27 +74,36 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 #ifdef OLED_ENABLE
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
   if (!is_keyboard_master()) {
-    return OLED_ROTATION_180;  // flips the display 180 degrees if offhand
+    return OLED_ROTATION_180;
   }
-  return rotation;
+  return OLED_ROTATION_270;
 }
 
 void oled_render_layer_state(void) {
-    // uprintf("default_layer_state %s", default_layer_state);
-    // uprintf("layer_state %s", layer_state);
-    // uprintf("highest_layer %s", get_highest_layer(layer_state));
-    // char layer_state_str[24];
-    // snprintf(layer_state_str, sizeof(layer_state_str), "%u", layer_state);
-    // oled_write_P(PSTR("Layer: "), false);
-    // oled_write_ln_P(layer_state_str, false);
+    static const char PROGMEM ru_logo[] = {
+        0x95, 0x96, 0x97, 0x98, 0x99,
+        0xB5, 0xB6, 0xB7, 0xB8, 0xB9,
+        0xD5, 0xD6, 0xD7, 0xD8, 0xD9,
+        0,
+    };
+    static const char PROGMEM en_logo[] = {
+        0x9A, 0x9B, 0x9C, 0x9D, 0x9E,
+        0xBA, 0xBB, 0xBC, 0xBD, 0xBE,
+        0xDA, 0xDB, 0xDC, 0xDD, 0xDE,
+        0,
+    };
+
     switch (system_lang) {
         case EN:
-            oled_write_P(PSTR("ENGLISH "), false);
+            oled_write_P(en_logo, false);
             break;
         case RU:
-            oled_write_P(PSTR("RUSSIAN "), false);
+            oled_write_P(ru_logo, false);
             break;
     }
+
+    oled_write_ln_P(PSTR(""), false);
+
     switch (get_highest_layer(layer_state)) {
         case BASE:
             oled_write_ln_P(PSTR(""), false);
@@ -111,7 +115,7 @@ void oled_render_layer_state(void) {
             oled_write_ln_P(PSTR("func"), false);
             break;
         case ADJUST:
-            oled_write_ln_P(PSTR("adjust"), false);
+            oled_write_ln_P(PSTR("led"), false);
             break;
         default:
             oled_write_ln_P(PSTR(""), false);
@@ -147,21 +151,6 @@ void oled_render_keylog(void) {
     oled_write(keylog_str, false);
 }
 
-void render_bootmagic_status(bool status) {
-    /* Show Ctrl-Gui Swap options */
-    static const char PROGMEM logo[][2][3] = {
-        {{0x97, 0x98, 0}, {0xb7, 0xb8, 0}},
-        {{0x95, 0x96, 0}, {0xb5, 0xb6, 0}},
-    };
-    if (status) {
-        oled_write_ln_P(logo[0][0], false);
-        oled_write_ln_P(logo[0][1], false);
-    } else {
-        oled_write_ln_P(logo[1][0], false);
-        oled_write_ln_P(logo[1][1], false);
-    }
-}
-
 void oled_render_logo(void) {
     static const char PROGMEM crkbd_logo[] = {
         0x80, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89, 0x8a, 0x8b, 0x8c, 0x8d, 0x8e, 0x8f, 0x90, 0x91, 0x92, 0x93, 0x94,
@@ -174,7 +163,7 @@ void oled_render_logo(void) {
 bool oled_task_user(void) {
     if (is_keyboard_master()) {
         oled_render_layer_state();
-        oled_render_keylog();
+        // oled_render_keylog();
     } else {
         oled_render_logo();
     }
@@ -320,22 +309,4 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
 
     return true;
-}
-
-// void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
-//     if (system_lang == RU && get_highest_layer(layer_state) == CODE && !record->event.pressed && (keycode == KC_DOT || keycode == KC_COMMA)) {
-//         lang_switched_keys_count--;
-//         if (lang_switched_keys_count <= 0) {
-//             tap_code(KC_CAPS_LOCK);
-//             // SEND_STRING(SS_LCMD(" "));
-//             lang_switched_keys_count = 0;
-//         }
-//     }
-// }
-
-void keyboard_post_init_user(void) {
-    // rgblight_enable_noeeprom(); // enables Rgb, without saving settings
-    // rgblight_sethsv_noeeprom(0, 0, 75);
-    // rgblight_mode_noeeprom(RGBLIGHT_MODE_STATIC_LIGHT);
-    rgb_matrix_mode(RGB_MATRIX_PIXEL_FLOW);
 }
