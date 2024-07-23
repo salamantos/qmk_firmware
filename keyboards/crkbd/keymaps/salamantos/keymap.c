@@ -19,57 +19,133 @@ enum LayerNames {
 
 enum SystemLang system_lang = EN;
 
+// Tap Dance declarations
+enum {
+    TD_M_HARD_SIGN,
+    TD_P_HA,
+    TD_G_ESC,
+    TD_B_TAB,
+    TD_E_LANG_CHANGE,
+    TD_QUES_EXCL,
+    TD_PARENS,
+    TD_COL_SEMICOL,
+    TD_BRACKETS,
+    TD_BRASES,
+    TD_SLASHES,
+    TD_QUOTES,
+    TD_EQ_PLUS,
+    TD_AMP_AST,
+    TD_LT_TD,
+    TD_GR_TILD,
+
+};
+
+// Tap Dance definitions
+tap_dance_action_t tap_dance_actions[] = {
+    [TD_M_HARD_SIGN] = ACTION_TAP_DANCE_DOUBLE(KC_M, KC_RBRC),
+    [TD_P_HA] = ACTION_TAP_DANCE_DOUBLE(KC_P, KC_LBRC),
+    [TD_G_ESC] = ACTION_TAP_DANCE_DOUBLE(KC_G, KC_ESC),
+    [TD_B_TAB] = ACTION_TAP_DANCE_DOUBLE(KC_B, KC_TAB),
+    [TD_E_LANG_CHANGE] = ACTION_TAP_DANCE_DOUBLE(KC_QUESTION, KC_CAPS_LOCK),
+    [TD_QUES_EXCL] = ACTION_TAP_DANCE_DOUBLE(KC_QUESTION, KC_EXCLAIM),
+    [TD_PARENS] = ACTION_TAP_DANCE_DOUBLE(KC_LEFT_PAREN, KC_RIGHT_PAREN),
+    [TD_COL_SEMICOL] = ACTION_TAP_DANCE_DOUBLE(KC_COLON, KC_SEMICOLON),
+    [TD_BRACKETS] = ACTION_TAP_DANCE_DOUBLE(KC_LEFT_BRACKET, KC_RIGHT_BRACKET),
+    [TD_BRASES] = ACTION_TAP_DANCE_DOUBLE(KC_LEFT_CURLY_BRACE, KC_RIGHT_CURLY_BRACE),
+    [TD_SLASHES] = ACTION_TAP_DANCE_DOUBLE(KC_SLASH, KC_BACKSLASH),
+    [TD_QUOTES] = ACTION_TAP_DANCE_DOUBLE(KC_DOUBLE_QUOTE, KC_QUOTE),
+    [TD_EQ_PLUS] = ACTION_TAP_DANCE_DOUBLE(KC_EQUAL, KC_PLUS),
+    [TD_AMP_AST] = ACTION_TAP_DANCE_DOUBLE(KC_AMPERSAND, KC_ASTERISK),
+    [TD_LT_TD] = ACTION_TAP_DANCE_DOUBLE(KC_LT, KC_GT),
+    [TD_GR_TILD] = ACTION_TAP_DANCE_DOUBLE(KC_GRAVE, KC_TILDE),
+};
+
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [BASE] = LAYOUT_split_3x6_3(
-  //,-----------------------------------------------------.                            ,--------------------------------------------------------.
-      TP(KC_TAB), KC_Q,    KC_W,    KC_E,    KC_R,  TP(KC_T),                             KC_Y,   KC_U,    KC_I,    KC_O,    KC_P,     KC_LBRC,
-  //|--------+--------+--------+--------+--------+--------|                            |--------+--------+--------+--------+--------+-----------|
-      KC_LCTL,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                              KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN,  KC_ENT,
-  //|--------+--------+--------+--------+--------+--------|                            |--------+--------+--------+--------+--------+-----------|
-      KC_LSFT,   KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                               KC_N,   TP(KC_M), KC_COMMA, KC_DOT, KC_QUOTE, TP(KC_CAPS_LOCK),
-  //|--------+--------+--------+--------+--------+--------+--------|          |--------+--------+--------+--------+--------+--------+-----------|
-                         LT(FUNC, KC_DEL),   LT(CODE,KC_SPC), KC_LGUI,         KC_LALT, LT(CODE, KC_SPC), LT(FUNC, KC_BSPC)
-                                      //`--------------------------'          `--------------------------'
+  //|--------+-------------+-------------+-----------------+-----------------+-----------|        |-------+-------------------+------------+------------+---------------+-----------------|
+     XXXXXXX, KC_Q,         KC_W,         KC_E,             KC_R,             TP(KC_T),            KC_Y,   KC_U,               KC_I,        KC_O,        TD(TD_P_HA),    XXXXXXX,
+  //|--------+-------------+-------------+-----------------+-----------------+-----------|        |-------+-------------------+------------+------------+---------------+-----------------|
+     XXXXXXX, CTL_T(KC_A),  ALT_T(KC_S),  GUI_T(KC_D),      SFT_T(KC_F),      TD(TD_G_ESC),        KC_H,   RSFT_T(KC_J),       GUI_T(KC_K), ALT_T(KC_L), CTL_T(KC_SCLN), XXXXXXX,
+  //|--------+-------------+-------------+-----------------+-----------------+-----------|        |-------+-------------------+------------+------------+---------------+-----------------|
+     XXXXXXX, KC_Z,         KC_X,         KC_C,             KC_V,             TD(TD_B_TAB),        KC_N,   TD(TD_M_HARD_SIGN), KC_COMMA,    KC_DOT,      KC_QUOTE,       TP(KC_CAPS_LOCK),
+  //|--------+-------------+-------------+-----------------+-----------------+-----------|        |-------+-------------------+------------+------------+---------------+-----------------|
+                                          LT(FUNC, KC_DEL), LT(CODE, KC_SPC), KC_LGUI,             KC_ENT, LT(CODE, KC_SPC),   LT(FUNC, KC_BSPC)
+  //                                     |-----------------+-----------------+-----------|        |-------+-------------------+------------------|
 
   ),
 
   [CODE] = LAYOUT_split_3x6_3(
-  //|----------+------+-------------+---------+---------+--------------|        |------------+---------+---------------+-----------------+-------------+------------|
-      KC_GRAVE, KC_1,  KC_2,         KC_3,     KC_4,     KC_5,                   KC_6,        KC_7,     KC_8,           KC_9,             KC_0,         XXXXXXX,
-  //|----------+------+-------------+---------+---------+--------------|        |------------+---------+---------------+-----------------+-------------+------------|
-      KC_TILDE, KC_LT, KC_AMPERSAND, KC_EQUAL, KC_MINUS, KC_QUOTE,               KC_QUESTION, KC_COMMA, KC_LEFT_PAREN,  KC_LEFT_BRACKET,  KC_SEMICOLON, KC_SLASH,
-  //|----------+------+-------------+---------+---------+--------------|        |------------+---------+---------------+-----------------+-------------+------------|
-      _______,  KC_GT, KC_ASTERISK,  KC_PLUS,  KC_UNDS,  KC_DOUBLE_QUOTE,        KC_EXCLAIM,  KC_DOT,   KC_RIGHT_PAREN, KC_RIGHT_BRACKET, KC_COLON,     KC_BACKSLASH,
-  //|----------+------+-------------+---------+---------+--------------|        |------------+---------+---------------+-----------------+-------------+------------|
-                                          KC_DEL, KC_SPC,  _______,    _______, KC_SPC, KC_BSPC
-                                      //`--------------------------'  `--------------------------'
+  //|--------+-------------+---------------+---------------+----------------+--------------|        |-----------------+----------------+--------------+-------------------+----------------+--------|
+     XXXXXXX, KC_1,         KC_2,           KC_3,           KC_4,            KC_5,                   KC_6,             KC_7,            KC_8,          KC_9,               KC_0,            XXXXXXX,
+  //|--------+-------------+---------------+---------------+----------------+--------------|        |-----------------+----------------+--------------+-------------------+----------------+--------|
+     XXXXXXX, TD(TD_LT_TD), TD(TD_AMP_AST), TD(TD_EQ_PLUS), SFT_T(KC_MINUS), TD(TD_QUOTES),          TD(TD_QUES_EXCL), SFT_T(KC_COMMA), TD(TD_PARENS), TD(TD_COL_SEMICOL), TD(TD_BRACKETS), XXXXXXX,
+  //|--------+-------------+---------------+---------------+----------------+--------------|        |-----------------+----------------+--------------+-------------------+----------------+--------|
+     XXXXXXX, XXXXXXX,      XXXXXXX,        XXXXXXX,        KC_UNDS,         TD(TD_GR_TILD),         KC_AT,            KC_DOT,          XXXXXXX,       TD(TD_SLASHES),     TD(TD_BRASES),   XXXXXXX,
+  //|--------+-------------+---------------+---------------+----------------+--------------|        |-----------------+----------------+--------------+-------------------+----------------+--------|
+                                            KC_DEL,         KC_SPC,          _______,                _______,          KC_SPC,          KC_BSPC
+  //                                       |---------------+----------------+--------------|        |-----------------+----------------+--------------|
   ),
 
   [FUNC] = LAYOUT_split_3x6_3(
-  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,                        KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,
-  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      K_PRTSC, XXXXXXX, XXXXXXX, KC_MPLY, KC_VOLU, KC_BRMU,                      KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, XXXXXXX, XXXXXXX,
-  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      TG(ADJUST), XXXXXXX, XXXXXXX, KC_MUTE, KC_VOLD, KC_BRMD,                      KC_HOME, KC_END, XXXXXXX, XXXXXXX, XXXXXXX, K_LOCK,
-  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          KC_DEL, KC_SPC,  _______,    _______, KC_SPC, KC_BSPC
-                                      //`--------------------------'  `--------------------------'
+  //|-----------+---------+---------------+---------+---------+-----------|        |--------------+--------+-------+----------------+--------+--------|
+     XXXXXXX,    KC_F1,    KC_F2,          KC_F3,    KC_F4,    KC_F5,               KC_F6,         KC_F7,   KC_F8,  KC_F9,           KC_F10,  K_LOCK,
+  //|-----------+---------+---------------+---------+---------+-----------|        |--------------+--------+-------+----------------+--------+--------|
+     XXXXXXX,    K_PRTSC,  KC_LALT,        KC_MPLY,  KC_VOLU,  KC_BRMU,             KC_LEFT,       KC_DOWN, KC_UP,  ALT_T(KC_RIGHT), KC_F11,  XXXXXXX,
+  //|-----------+---------+---------------+---------+---------+-----------|        |--------------+--------+-------+----------------+--------+--------|
+     TG(ADJUST), XXXXXXX,  LGUI(KC_SLASH), KC_MUTE,  KC_VOLD,  KC_BRMD,             LALT(KC_LEFT), KC_HOME, KC_END, LALT(KC_RIGHT),  KC_F12,  XXXXXXX,
+  //|-----------+---------+---------------+---------+---------+-----------|        |--------------+--------+-------+----------------+--------+--------|
+                                           KC_DEL,   KC_SPC,   _______,             _______,       KC_SPC,  KC_BSPC
+  //                                      |---------+---------+-----------|        |--------------+--------+-------|
   ),
 
   [ADJUST] = LAYOUT_split_3x6_3(
-  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      XXXXXXX, XXXXXXX, RGB_MODE_SWIRL, RGB_MODE_RAINBOW, RGB_MODE_BREATHE, RGB_MODE_PLAIN,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LSFT, RGB_VAI, RGB_SAI, RGB_HUI, RGB_MODE_FORWARD, RGB_TOG,                      RGB_SPI, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      TG(ADJUST), RGB_VAD, RGB_SAD, RGB_HUD, RGB_MODE_REVERSE, EE_CLR,                      RGB_SPD, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          XXXXXXX, XXXXXXX,  XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX
-                                      //`--------------------------'  `--------------------------'
+  //|-----------+--------+--------+--------+-----------------+----------|        |--------+--------+--------+--------+--------+--------|
+     XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          XXXXXXX,            XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  //|-----------+--------+--------+--------+-----------------+----------|        |--------+--------+--------+--------+--------+--------|
+     KC_LSFT,    RGB_VAI, RGB_SAI, RGB_HUI, RGB_MODE_FORWARD, RGB_TOG,            RGB_SPI, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  //|-----------+--------+--------+--------+-----------------+----------|        |--------+--------+--------+--------+--------+--------|
+     TG(ADJUST), RGB_VAD, RGB_SAD, RGB_HUD, RGB_MODE_REVERSE, EE_CLR,             RGB_SPD, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  //|-----------+--------+--------+--------+-----------------+----------|        |--------+--------+--------+--------+--------+--------|
+                                   XXXXXXX, XXXXXXX,          XXXXXXX,            XXXXXXX, XXXXXXX, XXXXXXX
+  //                              |--------+-----------------+----------|        |--------+--------+--------|
   )
 };
+
+bool caps_word_press_user(uint16_t keycode) {
+    switch (keycode) {
+        // Keycodes that continue Caps Word, with shift applied.
+        case KC_A ... KC_Z:
+        case KC_MINS:
+        case TD(TD_M_HARD_SIGN):
+        case TD(TD_P_HA):
+            add_weak_mods(MOD_BIT(KC_LSFT));  // Apply shift to next key.
+            return true;
+
+        // Keycodes that continue Caps Word, without shifting.
+        case KC_1 ... KC_0:
+        case KC_BSPC:
+        case KC_DEL:
+        case KC_UNDS:
+            return true;
+
+        default:
+            return false;  // Deactivate Caps Word.
+    }
+}
+
+bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case LT(CODE, KC_SPC):
+        case LT(FUNC, KC_DEL):
+        case LT(FUNC, KC_BSPC):
+            // Immediately select the hold action when another key is tapped.
+            return true;
+        default:
+            // Do not select the hold action when another key is tapped.
+            return false;
+    }
+}
 
 #ifdef OLED_ENABLE
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
@@ -183,6 +259,7 @@ bool process_CODE_keycode_on_RUS_lang(uint16_t keycode) {
             unregister_code(KC_LSFT);
             return false;
         case KC_COMMA:
+        case SFT_T(KC_COMMA):
             register_code(KC_LSFT);
             tap_code(KC_6);
             unregister_code(KC_LSFT);
@@ -238,6 +315,16 @@ bool process_CODE_keycode_on_RUS_lang(uint16_t keycode) {
         case KC_GT:
             tap_code(KC_NUBS);
             return false;
+        case KC_2:  // @
+            if (get_mods() == MOD_BIT(KC_LSFT)) {
+                unregister_code(KC_LSFT);
+                register_code(KC_LALT);
+                tap_code(KC_2);
+                unregister_code(KC_LALT);
+                register_code(KC_LSFT);
+                return false;
+            }
+            return true;
         default:
             return true;
     }
@@ -298,6 +385,17 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             if (!record->tap.count && record->event.pressed) {
                 tap_code(KC_LBRC);
                 return false;
+            }
+            return true;
+
+        case KC_CAPS_LOCK:
+            switch (system_lang) {
+                case EN:
+                    system_lang = RU;
+                    break;
+                case RU:
+                    system_lang = EN;
+                    break;
             }
             return true;
     }

@@ -8,3 +8,5 @@ OLED_DRIVER     = ssd1306
 LTO_ENABLE      = yes
 
 UNICODE_ENABLE = no
+TAP_DANCE_ENABLE = yes
+CAPS_WORD_ENABLE = yes
